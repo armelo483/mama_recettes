@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Toutes les recettes{% endblock %}
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+{% block body %}
+    <h1>Index</h1>
+    <p class="important">
+       Voici la liste de toutes les recettes
+    </p>
+
+    <div class="container">
+
+
+    {% for pair in recipes |batch(2)%}
+    <div class="row">
+
+        {% for recipe in pair %}
+            <div class="col">
+                <div class="card mb-2" >
+                    <img class="card-img-top" src="{{ recipe.imageurl }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.title }}</h5>
+                        <p class="card-text">{{ recipe.description }}</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+    {% endfor %}
+    </div>
+{% endblock %}
