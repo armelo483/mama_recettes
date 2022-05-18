@@ -5,13 +5,11 @@
     {{ parent() }}
 {% endblock %}
 {% block body %}
-    <h1>Index</h1>
-    <p class="important">
-       Voici la liste de toutes les recettes
-    </p>
 
     <div class="container">
-
+        <p class="important">
+            Voici la liste de toutes les recettes
+        </p>
 
     {% for pair in recipes |batch(2)%}
     <div class="row">
@@ -31,5 +29,9 @@
 
     </div>
     {% endfor %}
+
+        <div class="navigation mb-5">
+            {{ knp_pagination_render(recipes) }}
+        </div>
     </div>
 {% endblock %}
