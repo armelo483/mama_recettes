@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RecipeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
 
@@ -23,6 +25,7 @@ class Recipe
      */
     private $title;
 
+
     /**
      * @ORM\Column(type="text")
      */
@@ -42,6 +45,42 @@ class Recipe
      * @ORM\Column(type="string", length=255)
      */
     private $image_url;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $budget;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="recipes")
+     */
+    private $categories;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Ingredient::class, mappedBy="recipes")
+     */
+    private $ingredients;
+
+    /**
+     * @ORM\Column(type="time", nullable=true)
+     */
+    private $cookingDuration;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isMisEnAvant;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $niveau_difficulte;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+        $this->ingredients = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -109,6 +148,108 @@ class Recipe
     public function setImageUrl(string $image_url): self
     {
         $this->image_url = $image_url;
+
+        return $this;
+    }
+
+    public function getBudget(): ?float
+    {
+        return $this->budget;
+    }
+
+    public function setBudget(float $budget): self
+    {
+        $this->budget = $budget;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->addRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeRecipe($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getIngredients(): Collection
+    {
+        return $this->ingredients;
+    }
+
+    public function addIngredient(Category $ingredient): self
+    {
+        if (!$this->ingredients->contains($ingredient)) {
+            $this->ingredients[] = $ingredient;
+            $ingredient->addIngredient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngredient(Category $ingredient): self
+    {
+        if ($this->ingredients->removeElement($ingredient)) {
+            $ingredient->removeIngredient($this);
+        }
+
+        return $this;
+    }
+
+    public function getCookingDuration(): ?\DateTimeInterface
+    {
+        return $this->cookingDuration;
+    }
+
+    public function setCookingDuration(?\DateTimeInterface $cookingDuration): self
+    {
+        $this->cookingDuration = $cookingDuration;
+
+        return $this;
+    }
+
+    public function getIsMisEnAvant(): ?bool
+    {
+        return $this->isMisEnAvant;
+    }
+
+    public function setIsMisEnAvant(?bool $isMisEnAvant): self
+    {
+        $this->isMisEnAvant = $isMisEnAvant;
+
+        return $this;
+    }
+
+    public function getNiveauDifficulte(): ?int
+    {
+        return $this->niveau_difficulte;
+    }
+
+    public function setNiveauDifficulte(?int $niveau_difficulte): self
+    {
+        $this->niveau_difficulte = $niveau_difficulte;
 
         return $this;
     }
