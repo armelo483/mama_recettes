@@ -1,0 +1,9 @@
+easy_admin:
+  entities:
+    Recipe:
+      list:
+        fields:
+          - { property: 'image_file', type: 'vich_image', base_path: '%app.path.recipe_images%' }
+      show:
+        fields:
+          - { property: 'image_file', type: 'vich_image', base_path: '%app.path.recipe_images%' }
